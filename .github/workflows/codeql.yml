@@ -9,10 +9,15 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # required for all workflows
       security-events: write
       actions: read
       contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['go', 'java-kotlin', 'javascript-typescript', 'python']
+        # CodeQL supports: ['c-cpp','csharp','go','java-kotlin','javascript-typescript','python','ruby','swift']
 
     steps:
       - name: Checkout repository
@@ -20,6 +25,9 @@ jobs:
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          category: ${{ matrix.language }}
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
